@@ -1,0 +1,230 @@
+=====================================
+    This is grammatic of MySwift:
+=====================================
+
+
+
+<program> ::=
+    <global-list>
+
+<global-list> ::= TODO:
+    
+
+<protocol-declaration> ::=
+    <protocol-name> [ <type-inheritance-clause> ] <protocol-body>
+
+<protocol-name> ::= 
+    <identifier>
+
+<protocol-body> ::=
+    "{" <protocol-members> "}"
+
+<protocol-members> ::=
+    <protocol-member> [ <protocol-members> ]
+
+<protocol-member> ::= TODO:
+
+<class-declaration> ::=
+    "class" <class-name> [ <type-inheritance-clause> ] <class-body>
+
+<type-inheritance-clause> ::=
+    ":" <type-inheritance-list>
+
+<type-inheritance-list> ::=
+    <type-identifier> |
+    <type-identifier> , <type-inheritance-list>
+
+<class-name> ::=
+    <identifier>
+
+<class-body> ::=
+    "{" <class-members> "}"
+
+<class-members> ::=
+    <class-member> [ <class-members> ]
+
+<class-member> ::=
+    <declaration>
+
+<extension-declaration> ::=
+    "extension" <type-identifier> [ <type-inheritance-clause> ] <extension-body>
+
+<extension-body> ::=
+    "{" <extension-members> "}"
+
+<extension-members> ::=
+    <extension-member> [ <extension-members> ]
+
+<extension-member> ::=
+    <declaration>
+
+<expression-list> ::=
+    <expression> |
+    <expression> "," <expression-list>
+
+TODO: Check type-identifier
+
+<type-identifier> ::=
+    <type-name> |
+    <type-name> "." <type-identifier>
+
+<type-identifier> ::=
+    <identifier>
+
+<declarations> ::=
+    <declaration> [ declarations ]
+
+<declaration> ::= 
+    <constant-declaration> |
+    <varibale-declaration> |
+    <function-declaration> |
+    <class-declaration> |
+    <protocol-declaration> |
+    <initializer-declaration> |
+    <deinitializer-declaration> |
+    <extension-declaration> |
+    <subcript-declaration> |
+    <operator-declaration>
+
+<constant-declaration> ::=
+    "let" <pattern-initializer-list>
+
+<pattern-initializer-list> ::=
+    <pattern-initializer> |
+    <pattern-initializer> , <pattern-initializer-list>
+
+<pattern-initializer> ::=
+    <pattern> [ <initializer> ]
+
+<initializer> ::=
+    "=" <expression>
+
+<pattern> ::=
+    <wildcard-pattern> [ <type-annotation> ] |
+    <identifier-pattern> [ <type-annotation> ]
+
+<wildcard-pattern> ::=
+    "_"
+
+<identifier-pattern> ::=
+    <identifier>
+
+<type-annotation> ::=
+    ":" <type>
+
+<variable-declaration> ::=
+    "var" <pattern-initializer-list>
+
+<function-declaration> ::= TODO:
+
+
+<initializer-declaration> ::=
+    "init" <parameter-clause> <initializer-body>
+
+<initializer-body> ::=
+    <code-block>
+
+<code-block> ::=
+    "{" <statements> "}"
+
+<statements> ::=
+    <statement> [ <statements> ]
+
+<statement> ::=
+    <expression> [ ";" ] |
+    <declaration> [ ";" ] |
+    <loop-statement> [ ";" ] |
+    <branch-statement> [ ";" ] |
+    <control-transfer-statement> [ ";" ]
+
+<loop-statement> ::=
+    <for-in-statement> |
+    <while-statement>
+
+<for-in-statement> ::=
+    "for" <pattern> "in" <expression> <code-block>
+
+<while-statement> ::=
+    "while" <condition> <code-block>
+
+<condition> ::=
+    <expression>
+
+<branch-statement> ::=
+    <if-statement> |
+    <guard-statement>
+
+<if-statement> ::=
+    "if" <condition> <code-block> [ <else-clause> ]
+
+<else-clause> ::=
+    "else" <code-block> |
+    "else" <if-statement>
+
+<guard-statement> ::=
+    "guard" <condition> "else" <code-block>
+
+<control-transfer-statement> ::=
+    <break-statement> |
+    <continue-statement> |
+    <return-statement>
+
+<break-statement> ::=
+    "break"
+
+<continue-statement> ::=
+    "continue"
+
+<return-statement> ::=
+    "return" [ <expression> ]
+
+TODO: Think about prefix expression
+
+<expression> ::=
+    <primary-expression> |
+    <function-call-expression> |
+    <explicit-member-expression> |
+    <subcript-expression>
+
+<primary-expression> ::=
+    <identifier> |
+    <self-expression> |
+    <superclass-expression> |
+    <parenthesized-expression> |
+    <wildcard-expression>
+
+<self-expression> ::=
+    "self"
+
+<superclass-expression> ::=
+    "super"
+
+<parenthesized-expression> ::=
+    "(" <expression> ")"
+
+<wildcard-expression> ::=
+    "_"
+
+<function-call-expression> ::=
+    <identifier> <function-call-argument-clause>
+
+<function-call-argument-clause> ::=
+    "(" ")" |
+    "(" <function-call-argument-list> ")"
+    
+<function-call-argument-list> ::=
+    <function-call-argument> |
+    <function-call-argument> "," <function-call-argument-list>
+
+<function-call-argument> ::=
+    <expression>
+
+<explicit-member-expression> ::=
+    <expression> "." <explicit-member-argument>
+
+<explicit-member-argument> ::=
+    <identifier> |
+    <function-call-expression>
+
+<subcript-expression> ::=
+    <expression> "[" <expression> "]"
