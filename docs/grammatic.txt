@@ -4,17 +4,62 @@
 
 ==================
     TODO LIST:
-
 ==================
 
-<program> ::=
+=====================================
+
+    Symbols:
+
+"class"
+"and"
+"or"
+"not"
+"in"
+"range"
+"while"
+"for"
+"self"
+"String"
+"Int"
+"Bool"
+"Double"
+"if"
+"else"
+"print"
+"("
+")"
+":"
+"{"
+"}"
+","
+"."
+"["
+"]"
+"="
+"_"
+"->"
+"-"
+"+"
+"*"
+"/"
+"\n"
+
+=====================================
+
+<endl> ::=
+    "\n"
+
+<unit> ::=
     <global-list>
 
 <global-list> ::=
-    <class-declaration> [ <global-list> ] |
-    <function-declaration> [ <global-list> ] |
-    <variable-declaration> [ <global-list> ] |
-    <constant-declaration> [ <global-list> ]
+    <global-declaration> [ <global-list> ]
+
+<global-declaration> ::=
+    <class-declaration> |
+    <function-declaration> |
+    <variable-declaration> |
+    <constant-declaration>
 
 <class-declaration> ::=
     "class" <class-name> [ <type-inheritance-clause> ] <class-body>
@@ -24,7 +69,7 @@
 
 <type-inheritance-list> ::=
     <type-identifier> |
-    <type-identifier> , <type-inheritance-list>
+    <type-identifier> "," <type-inheritance-list>
 
 <class-name> ::=
     <identifier>
@@ -42,25 +87,11 @@
     "extension" <type-identifier> [ <type-inheritance-clause> ] <extension-body>
 
 <extension-body> ::=
-    "{" <extension-members> "}"
-
-<extension-members> ::=
-    <extension-member> [ <extension-members> ]
-
-<extension-member> ::=
-    <declaration>
-
-<expression-list> ::=
-    <expression> |
-    <expression> "," <expression-list>
+    "{" <class-members> "}"
 
 <type> ::=
-    <type-identifier> |
-    "[" <type-identifier> "]"
-
-<type-identifier> ::=
     <type-name> |
-    <type-name> "." <type-identifier>
+    "[" <type-name> "]"
 
 <type-name> ::=
     <identifier> |
@@ -68,9 +99,6 @@
     "Int" |
     "Double" |
     "Bool"
-
-<type-identifier> ::=
-    <identifier>
 
 <declarations> ::=
     <declaration> [ declarations ]
@@ -86,10 +114,6 @@
 <constant-declaration> ::=
     "let" <pattern> <initializer>
 
-<pattern-initializer-list> ::=
-    <pattern-initializer> |
-    <pattern-initializer> , <pattern-initializer-list>
-
 <pattern-initializer> ::=
     <pattern> [ <initializer> ]
 
@@ -97,69 +121,58 @@
     "=" <expression>
 
 <pattern> ::=
-    <wildcard-pattern> [ <type-annotation> ] |
-    <identifier-pattern> [ <type-annotation> ]
-
-<wildcard-pattern> ::=
-    "_"
-
-<identifier-pattern> ::=
-    <identifier>
+    "_" [ <type-annotation> ] |
+    <identifier> [ <type-annotation> ]
 
 <type-annotation> ::=
-    ":" <type> |
-    ":" "[" <type> "]"
+    ":" <type>
 
 <variable-declaration> ::=
-    "var" <pattern-initializer-list>
+    "var" <pattern-initializer>
 
 <function-declaration> ::=
-    "func" <function-name> <function-declaration-argument-clause> [ <function-return-type> ] <code-block>
+    "func" <identifier> <function-declaration-argument-clause> [ <function-return-type> ] <code-block>
 
 <function-declaration-argument-clause> ::=
     "(" [ <pattern-list> ] ")"
 
 <pattern-list> ::=
     <pattern> |
-    <pattern> <pattern-list>
+    <pattern> "," <pattern-list>
 
 <function-return-type> ::=
     "->" <type>
 
 <initializer-declaration> ::=
-    "init" <parameter-clause> <initializer-body>
-
-<initializer-body> ::=
-    <code-block>
+    "init" <function-declaration-argument-clause> <code-block>
 
 <code-block> ::=
     "{" <statements> "}"
 
 <statements> ::=
-    <statement> [ <statements> ]
+    eps
+    <statement> <endl> <statements>
 
 <statement> ::=
-    <expression> [ ";" ] |
-    <declaration> [ ";" ] |
-    <loop-statement> [ ";" ] |
-    <if-statement> [ ";" ] |
-    <control-transfer-statement> [ ";" ]
-
-<loop-statement> ::=
+    <expression> |
+    <declaration> |
     <for-in-statement> |
-    <while-statement>
+    <while-statement> |
+    <if-statement> |
+    <control-transfer-statement> |
+    <print-statement>
+
+<print-statement> ::=
+    "print" "(" <expressions> ")"
 
 <for-in-statement> ::=
     "for" <pattern> "in" "range" "(" <expression> ")" <code-block>
 
 <while-statement> ::=
-    "while" <condition> <code-block>
-
-<condition> ::=
-    <expression>
+    "while" <expression> <code-block>
 
 <if-statement> ::=
-    "if" <condition> <code-block> [ <else-clause> ]
+    "if" <expression> <code-block> [ <else-clause> ]
 
 <else-clause> ::=
     "else" <code-block> |
@@ -169,7 +182,6 @@
     "break"|
     "continue" |
     <return-statement>
-
 
 <return-statement> ::=
     "return" [ <expression> ]
@@ -181,24 +193,26 @@
     <subcript-expression> |
     <prefix-operator> <expression> |
     <expression> <infix-operator> <expression> |
-    <array-expression>
+    <array-expression> |
+    <number>
+
+<expressions> ::=
+    eps |
+    <expression> "," <expressions>
 
 <array-expression> ::=
-    "[" <expression>* "]"
+    "[" <expressions> "]"
 
 <prefix-operator> ::=
     "-" |
-    "!"
+    "not"
 
 <infix-operator> ::=
-    "+" | "*" | "/" | "+" | "and" | "or" | "="
+    "+" | "*" | "/" | "-" | "and" | "or" | "=" | ">" | ">=" | "<" | "<=" | "=="
 
 <primary-expression> ::=
     <identifier> |
     "self" |
-    <parenthesized-expression>
-
-<parenthesized-expression> ::=
     "(" <expression> ")"
 
 <function-call-expression> ::=
@@ -208,11 +222,8 @@
     "(" [ <function-call-argument-list>  ] ")"
     
 <function-call-argument-list> ::=
-    <function-call-argument> |
-    <function-call-argument> "," <function-call-argument-list>
-
-<function-call-argument> ::=
-    <expression>
+    <expression> |
+    <expression> "," <function-call-argument-list>
 
 <explicit-member-expression> ::=
     <expression> "." <explicit-member-argument>
