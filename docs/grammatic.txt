@@ -1,0 +1,236 @@
+=====================================
+    This is grammatic of MySwift:
+=====================================
+
+==================
+    TODO LIST:
+==================
+
+=====================================
+
+    Symbols:
+
+"class"
+"and"
+"or"
+"not"
+"in"
+"range"
+"while"
+"for"
+"self"
+"String"
+"Int"
+"Bool"
+"Double"
+"if"
+"else"
+"print"
+"("
+")"
+":"
+"{"
+"}"
+","
+"."
+"["
+"]"
+"="
+"_"
+"->"
+"-"
+"+"
+"*"
+"/"
+"\n"
+
+=====================================
+
+<endl> ::=
+    "\n"
+
+<unit> ::=
+    <global-list>
+
+<global-list> ::=
+    <global-declaration> [ <global-list> ]
+
+<global-declaration> ::=
+    <class-declaration> |
+    <function-declaration> |
+    <variable-declaration> |
+    <constant-declaration>
+
+<class-declaration> ::=
+    "class" <class-name> [ <type-inheritance-clause> ] <class-body>
+
+<type-inheritance-clause> ::=
+    ":" <type-inheritance-list>
+
+<type-inheritance-list> ::=
+    <type-identifier> |
+    <type-identifier> "," <type-inheritance-list>
+
+<class-name> ::=
+    <identifier>
+
+<class-body> ::=
+    "{" <class-members> "}"
+
+<class-members> ::=
+    <class-member> [ <class-members> ]
+
+<class-member> ::=
+    <declaration>
+
+<extension-declaration> ::=
+    "extension" <type-identifier> [ <type-inheritance-clause> ] <extension-body>
+
+<extension-body> ::=
+    "{" <class-members> "}"
+
+<type> ::=
+    <type-name> |
+    "[" <type-name> "]"
+
+<type-name> ::=
+    <identifier> |
+    "String" |
+    "Int" |
+    "Double" |
+    "Bool"
+
+<declarations> ::=
+    <declaration> [ declarations ]
+
+<declaration> ::= 
+    <constant-declaration> |
+    <varibale-declaration> |
+    <function-declaration> |
+    <class-declaration> |
+    <initializer-declaration> |
+    <deinitializer-declaration>
+
+<constant-declaration> ::=
+    "let" <pattern> <initializer>
+
+<pattern-initializer> ::=
+    <pattern> [ <initializer> ]
+
+<initializer> ::=
+    "=" <expression>
+
+<pattern> ::=
+    "_" [ <type-annotation> ] |
+    <identifier> [ <type-annotation> ]
+
+<type-annotation> ::=
+    ":" <type>
+
+<variable-declaration> ::=
+    "var" <pattern-initializer>
+
+<function-declaration> ::=
+    "func" <identifier> <function-declaration-argument-clause> [ <function-return-type> ] <code-block>
+
+<function-declaration-argument-clause> ::=
+    "(" [ <pattern-list> ] ")"
+
+<pattern-list> ::=
+    <pattern> |
+    <pattern> "," <pattern-list>
+
+<function-return-type> ::=
+    "->" <type>
+
+<initializer-declaration> ::=
+    "init" <function-declaration-argument-clause> <code-block>
+
+<code-block> ::=
+    "{" <statements> "}"
+
+<statements> ::=
+    eps
+    <statement> <endl> <statements>
+
+<statement> ::=
+    <expression> |
+    <declaration> |
+    <for-in-statement> |
+    <while-statement> |
+    <if-statement> |
+    <control-transfer-statement> |
+    <print-statement>
+
+<print-statement> ::=
+    "print" "(" <expressions> ")"
+
+<for-in-statement> ::=
+    "for" <pattern> "in" "range" "(" <expression> ")" <code-block>
+
+<while-statement> ::=
+    "while" <expression> <code-block>
+
+<if-statement> ::=
+    "if" <expression> <code-block> [ <else-clause> ]
+
+<else-clause> ::=
+    "else" <code-block> |
+    "else" <if-statement>
+
+<control-transfer-statement> ::=
+    "break"|
+    "continue" |
+    <return-statement>
+
+<return-statement> ::=
+    "return" [ <expression> ]
+
+<expression> ::=
+    <primary-expression> |
+    <function-call-expression> |
+    <explicit-member-expression> |
+    <subcript-expression> |
+    <prefix-operator> <expression> |
+    <expression> <infix-operator> <expression> |
+    <array-expression> |
+    <number>
+
+<expressions> ::=
+    eps |
+    <expression> "," <expressions>
+
+<array-expression> ::=
+    "[" <expressions> "]"
+
+<prefix-operator> ::=
+    "-" |
+    "not"
+
+<infix-operator> ::=
+    "+" | "*" | "/" | "-" | "and" | "or" | "=" | ">" | ">=" | "<" | "<=" | "=="
+
+<primary-expression> ::=
+    <identifier> |
+    "self" |
+    "(" <expression> ")"
+
+<function-call-expression> ::=
+    <identifier> <function-call-argument-clause>
+
+<function-call-argument-clause> ::=
+    "(" [ <function-call-argument-list>  ] ")"
+    
+<function-call-argument-list> ::=
+    <expression> |
+    <expression> "," <function-call-argument-list>
+
+<explicit-member-expression> ::=
+    <expression> "." <explicit-member-argument>
+
+<explicit-member-argument> ::=
+    <identifier> |
+    <function-call-expression>
+
+<subcript-expression> ::=
+    <expression> "[" <expression> "]"
