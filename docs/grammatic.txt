@@ -42,6 +42,11 @@
 "+"
 "*"
 "/"
+">"
+">="
+"<"
+"<="
+"=="
 "\n"
 
 =====================================
@@ -81,7 +86,7 @@
     <class-member> [ <class-members> ]
 
 <class-member> ::=
-    <declaration>
+    <declarations>
 
 <extension-declaration> ::=
     "extension" <type-identifier> [ <type-inheritance-clause> ] <extension-body>

@@ -1,3 +1,11 @@
 .vscode
 lexer.cpp
 /build
+/cmake-build-debug
+/cmake-build-debug-concurrency
+/cmake-build-debug-system
+scanner.cpp
+parser.hh
+parser.cpp
+location.hh
+.idea
