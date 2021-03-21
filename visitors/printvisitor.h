@@ -9,28 +9,28 @@ class SymbolTreeVisitor: public Visitor {
  public:
     SymbolTreeVisitor(const std::string& filename);
     ~SymbolTreeVisitor();
-    virtual void Visit(Assignment* assignment) override;
-    virtual void Visit(AssignmentList* expression) override;
+    void Visit(StatementList* expression) override;
 
-    virtual void Visit(AddExpression* expression) override;
-    virtual void Visit(AndExpression* expression) override;
-    virtual void Visit(AssignmentExpression* expression) override;
-    virtual void Visit(ComparisonExpression* expression) override;
-    virtual void Visit(DivExpression* expression) override;
-    virtual void Visit(IdentExpression* expression) override;
-    virtual void Visit(MulExpression* expression) override;
-    virtual void Visit(NotExpression* expression) override;
-    virtual void Visit(ObjectExpression* expression) override;
-    virtual void Visit(OrExpression* expression) override;
-    virtual void Visit(SubtractExpression* expression) override;
-    virtual void Visit(UnaryMinusExpression* expression) override;
+    void Visit(BinaryExpression* expression) override;
+    void Visit(UnaryExpression* expression) override;
+    void Visit(IdentExpression* expression) override;
+    void Visit(ObjectExpression* expression) override;
+    void Visit(SubscriptExpression* expression) override;
+    void Visit(FunctionCallExpression* expression) override;
+    void Visit(ArrayExpression* expression) override;
 
-    virtual void Visit(Program* program) override;
+    void Visit(DeclarationList* declarations) override;
+
+    void Visit(ExpressionList* expressions) override;
+    void Visit(CodeBlock* code) override;
+    void Visit(FunctionDeclaration* function) override;
+
+    void Visit(Pattern* pattern) override;
+    void Visit(PatternList* pattern_list) override;
+
+    void Visit(Program* program) override;
 
  private:
-
-    void VisitBinaryExpression(BinaryExpression* exp);
-    void VisitUnaryExpression(UnaryExpression *exp);
 
     void PrintTabs();
 

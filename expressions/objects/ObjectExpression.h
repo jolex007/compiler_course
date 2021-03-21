@@ -18,4 +18,3 @@ public:
 private:
     BaseObject* object_ptr_;
 };
-

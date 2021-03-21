@@ -1,11 +1,10 @@
 #pragma once
 
-#include "assignments/AssignmentList.h"
+#include "statements/StatementList.h"
 #include "expressions/Expression.h"
 
 class Program {
 public:
-    Program(AssignmentList* assignments, Expression* expression);
-    AssignmentList* assignments_;
-    Expression* expression_;
+    Program(DeclarationList* assignments);
+    DeclarationList* declarations_;
 };

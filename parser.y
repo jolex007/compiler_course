@@ -11,10 +11,25 @@
     class Scanner;
     class Driver;
 
-    class Assignment;
-    class AssignmentList;
+    class Statement;
+    class StatementList;
+
+    class Declaration;
+    class DeclarationList;
+
+    class Expression;
+    class ExpressionList;
+
+    class SubscriptExpression;
+    class FunctionCallExpression;
+    class ArrayExpression;
 
     class Program;
+
+    class FunctionDeclaration;
+    class PatternList;
+    class Pattern;
+    class CodeBlock;
 }
 
 %define parse.trace
@@ -95,24 +110,45 @@
 // TODO:
 //   Add nterms
 
+%nterm <Expression*> expression
+%nterm <ExpressionList*> expressions
+%nterm <SubscriptExpression*> subscript_expression
+%nterm <FunctionCallExpression*> function_call_expression
+%nterm <ExpressionList*> function_call_argument_clause
+%nterm <ArrayExpression*> array_expression
+%nterm <Program*> program
+%nterm <DeclarationList*> global_list
+%nterm <Declaration*> global_declaration
+%nterm <DeclarationList*> declarations
+%nterm <Declaration*> declaration
+%nterm <FunctionDeclaration*> function_declaration
+%nterm <PatternList*> function_declaration_argument_clause
+%nterm <PatternList*> pattern_list
+%nterm <Pattern*> pattern
+%nterm <CodeBlock*> code_block
+%nterm <StatementList*> statements
+%nterm <Statement*> statement
+%nterm <Expression*> primary_expression
+%nterm <std::string> prefix_operator
+%nterm <std::string> infix_operator
 
 
 %%
 
-%start unit;
+%start program;
 
-unit:
-    global_list
+program:
+    global_list { $$ = new Program($1); driver.program = $$; }
     ;
 
 global_list:
-    global_declaration
-    | global_declaration global_list
+    %empty { $$ = new DeclarationList(@$); }
+    | global_declaration global_list { $2->AddDeclaration($1); $$ = $2; }
     ;
 
 global_declaration:
     class_declaration
-    | function_declaration
+    | function_declaration { $$ = $1; }
     | variable_declaration
     | constant_declaration
     | extension_declaration
@@ -171,14 +207,14 @@ type_name:
     ;
 
 declarations:
-    declaration
-    | declaration declarations
+    %empty { $$ = new DeclarationList(@$); }
+    | declaration declarations { $2->AddDeclaration($1); $$ = $2; }
     ;
 
 declaration:
     constant_declaration
     | variable_declaration
-    | function_declaration
+    | function_declaration { $$ = $1; }
     | class_declaration
     | initializer_declaration
     | deinitializer_declaration
@@ -204,7 +240,7 @@ initializer:
 pattern:
     "_"
     | "_" type_annotation
-    | "identifier"
+    | "identifier" { $$ = new Pattern(new IdentExpression($1, @$), @$); } // TODO: fix it for pattern FIX ALL
     | "identifier" type_annotation
     ;
 
@@ -217,17 +253,17 @@ variable_declaration:
     ;
 
 function_declaration:
-    "func" "identifier" function_declaration_argument_clause code_block
+    "func" "identifier" function_declaration_argument_clause code_block { $$ = new FunctionDeclaration($3, $4, @$); }
     | "func" "identifier" function_declaration_argument_clause function_return_type code_block
     ;
 
 function_declaration_argument_clause:
-    "(" pattern_list ")"
+    "(" pattern_list ")" { $$ = $2; }
     ;
 
 pattern_list:
-    %empty
-    | pattern pattern_list
+    %empty { $$ = new PatternList(@$); }
+    | pattern pattern_list { $2->AddPattern($1); $$ = $2; } // TODO: add "," separator
     ;
 
 function_return_type:
@@ -239,18 +275,17 @@ initializer_declaration:
     ;
 
 code_block:
-    "{" statements "}"
+    "{" statements "}" { $$ = new CodeBlock($2, @$); }
     ;
 
 statements:
-    %empty
-    | statement
-    | statement statements
+    %empty { $$ = new StatementList(@$); }
+    | statement statements { $2->AddStatement($1); $$ = $2; } // TODO: fix '\n' separator
     ;
 
 statement:
-    expression
-    | declaration
+    expression { $$ = $1; }
+    | declaration { $$ = $1; }
     | for_in_statement
     | while_statement
     | if_statement
@@ -287,31 +322,31 @@ return_statement:
     ;
 
 expression:
-    primary_expression
-    | function_call_expression
+    primary_expression { $$ = $1; }
+    | function_call_expression { $$ = $1; }
     | explicit_member_expression
-    | subcript_expression
-    | prefix_operator expression
-    | expression infix_operator expression
-    | array_expression
-    | "number"
+    | subscript_expression { $$ = $1; }
+    | prefix_operator expression { $$ = new UnaryExpression($2, $1, @$); }
+    | expression infix_operator expression { $$ = new BinaryExpression($1, $3, $2, @$); }
+    | array_expression { $$ = $1; }
+    | "number" { $$ = new ObjectExpression($1, @$); }
     ;
 
 expressions:
-    %empty
-    | expression expressions
+    %empty { $$ = new ExpressionList(@$); }
+    | expression "," expressions { $3->AddExpression($1); $$ = $3; } // TODO: fix "," comma
     ;
 
 array_expression:
-    "[" expressions "]"
+    "[" expressions "]" { $$ = new ArrayExpression($2, @$); }
     ;
 
-prefix_operator:
+prefix_operator: // Done
     "-"
     | "not"
     ;
 
-infix_operator:
+infix_operator: // Done
     "+"
     | "*"
     | "/"
@@ -323,30 +358,22 @@ infix_operator:
     | ">="
     | "<"
     | "<="
+    | "=="
     ;
 
 primary_expression:
-    "identifier"
+    "identifier" { $$ = new IdentExpression($1, @$); }
     | "self"
     | "(" expression ")"
     ;
 
 function_call_expression:
-    "identifier" function_call_argument_clause
+    "identifier" function_call_argument_clause { $$ = new FunctionCallExpression($1, $2, @$); }
     ;
 
 function_call_argument_clause:
-    "(" ")"
-    | "(" function_call_argument_list ")"
-    ;
-
-function_call_argument_list:
-    function_call_argument
-    | function_call_argument "," function_call_argument_list
-    ;
-
-function_call_argument:
-    expression
+    "(" ")" { $$ = new ExpressionList(@$); }
+    | "(" expressions ")" { $$ = $2; }
     ;
 
 explicit_member_expression:
@@ -358,8 +385,8 @@ explicit_member_argument:
     | function_call_expression
     ;
 
-subcript_expression:
-    expression "[" expression "]"
+subscript_expression:
+    expression "[" expression "]" { $$ = new SubscriptExpression($1, $3, @$); }
     ;
 
 %%

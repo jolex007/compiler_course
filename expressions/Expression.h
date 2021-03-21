@@ -1,9 +1,10 @@
 #pragma once
-#include "assignments/BaseElement.h"
+#include "statements/Statement.h"
+#include <string>
 
-class Expression : public BaseElement {
+class Expression : public Statement {
 public:
-    Expression(const location_type& loc, const std::string& name) : BaseElement(loc, name) {};
-    virtual ~Expression() = default;
+    Expression(const location_type& loc, const std::string& name) : Statement(loc, name) {};
+    ~Expression() override = default;
 };
 

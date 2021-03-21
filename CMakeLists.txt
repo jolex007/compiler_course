@@ -52,22 +52,11 @@ add_executable(
         ${BISON_MyParser_OUTPUTS}
         ${FLEX_MyScanner_OUTPUTS}
 
-        assignments/Assignment.cpp
-        assignments/AssignmentList.cpp
+        statements/Statement.cpp
+        statements/StatementList.cpp
 
         expressions/objects/ObjectExpression.cpp
         expressions/objects/IdentExpression.cpp
-        expressions/objects/AssignmentExpression.cpp
-
-        expressions/arithmetic/AddExpression.cpp
-        expressions/arithmetic/DivExpression.cpp
-        expressions/arithmetic/MulExpression.cpp
-        expressions/arithmetic/SubtractExpression.cpp
-        expressions/arithmetic/UnaryMinusExpression.cpp
-        expressions/logic/AndExpression.cpp
-        expressions/logic/ComparisonExpression.cpp
-        expressions/logic/NotExpression.cpp
-        expressions/logic/OrExpression.cpp
 
         objects/IntegerObject.cpp
         objects/BooleanObject.cpp
@@ -76,7 +65,7 @@ add_executable(
         visitors/printvisitor.cpp
 
         program.cpp
-)
+        expressions/arithmetic/BinaryExpression.cpp expressions/arithmetic/BinaryExpression.h expressions/arithmetic/UnaryExpression.cpp declarations/Declaration.h declarations/DeclarationList.cpp declarations/DeclarationList.h declarations/ClassDeclaration.cpp declarations/ClassDeclaration.h declarations/FunctionDeclaration.cpp declarations/FunctionDeclaration.h declarations/VariableDeclaration.cpp declarations/VariableDeclaration.h declarations/ConstantDeclaration.cpp declarations/ConstantDeclaration.h declarations/ExtensionDeclaration.cpp declarations/ExtensionDeclaration.h declarations/InitializerDeclaration.cpp declarations/InitializerDeclaration.h declarations/DeinitializerDeclaration.cpp declarations/DeinitializerDeclaration.h expressions/ExpressionList.cpp expressions/ExpressionList.h CodeUtils/CodeBlock.cpp CodeUtils/CodeBlock.h declarations/pattern/Pattern.cpp declarations/pattern/Pattern.h declarations/pattern/PatternList.cpp declarations/pattern/PatternList.h expressions/objects/SubscriptExpression.cpp expressions/objects/SubscriptExpression.h expressions/other/FunctionCallExpression.cpp expressions/other/FunctionCallExpression.h expressions/objects/ArrayExpression.cpp expressions/objects/ArrayExpression.h)
 
 target_include_directories(
         Compiler PRIVATE ${Compiler_SOURCE_DIR}

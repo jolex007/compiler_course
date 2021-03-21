@@ -1,25 +1,20 @@
 #pragma once
 
-class Assignment;
-class AssignmentList;
+class Statement;
+class StatementList;
 
 class Expression;
+class ExpressionList;
 class BinaryExpression;
 class UnaryExpression;
 
-
-class AddExpression;
-class AndExpression;
-class AssignmentExpression;
-class ComparisonExpression;
-class DivExpression;
+class BinaryExpression;
 class IdentExpression;
-class MulExpression;
-class NotExpression;
 class ObjectExpression;
-class OrExpression;
-class SubtractExpression;
-class UnaryMinusExpression;
+
+class SubscriptExpression;
+class FunctionCallExpression;
+class ArrayExpression;
 
 class Program;
 
@@ -27,3 +22,12 @@ class BaseObject;
 class IntegerObject;
 class StringObject;
 class BooleanObject;
+
+class Declaration;
+class DeclarationList;
+
+class FunctionDeclaration;
+class CodeBlock;
+
+class Pattern;
+class PatternList;

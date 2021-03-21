@@ -1,25 +1,31 @@
 #pragma once
 
-#include "assignments/Assignment.h"
-#include "assignments/AssignmentList.h"
+#include "statements/Statement.h"
+#include "statements/StatementList.h"
 
-#include "expressions/arithmetic/AddExpression.h"
-#include "expressions/arithmetic/DivExpression.h"
-#include "expressions/arithmetic/SubtractExpression.h"
-#include "expressions/arithmetic/MulExpression.h"
-#include "expressions/arithmetic/UnaryMinusExpression.h"
-
-#include "expressions/logic/AndExpression.h"
-#include "expressions/logic/ComparisonExpression.h"
-#include "expressions/logic/OrExpression.h"
-#include "expressions/logic/NotExpression.h"
+#include "expressions/arithmetic/BinaryExpression.h"
+#include "expressions/arithmetic/UnaryExpression.h"
+#include "expressions/Expression.h"
+#include "expressions/ExpressionList.h"
 
 #include "expressions/objects/ObjectExpression.h"
-#include "expressions/objects/AssignmentExpression.h"
 #include "expressions/objects/IdentExpression.h"
+#include "expressions/objects/SubscriptExpression.h"
+#include "expressions/other/FunctionCallExpression.h"
+#include "expressions/objects/ArrayExpression.h"
+
+#include "declarations/Declaration.h"
+#include "declarations/DeclarationList.h"
 
 #include "program.h"
 #include "objects/BaseObject.h"
 #include "objects/IntegerObject.h"
 #include "objects/BooleanObject.h"
 #include "objects/StringObject.h"
+
+#include "CodeUtils/CodeBlock.h"
+
+#include "declarations/FunctionDeclaration.h"
+
+#include "declarations/pattern/Pattern.h"
+#include "declarations/pattern/PatternList.h"

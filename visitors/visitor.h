@@ -5,23 +5,23 @@
 
 class Visitor {
 public:
-    virtual void Visit(Assignment* assignment) = 0;
-    virtual void Visit(AssignmentList* assignment_list) = 0;
+    virtual void Visit(StatementList* assignment_list) = 0;
 
-    virtual void Visit(AddExpression* expression) = 0;
-    virtual void Visit(AndExpression* expression) = 0;
-    virtual void Visit(AssignmentExpression* expression) = 0;
-    virtual void Visit(ComparisonExpression* expression) = 0;
-    virtual void Visit(DivExpression* expression) = 0;
+    virtual void Visit(BinaryExpression* expression) = 0;
     virtual void Visit(IdentExpression* expression) = 0;
-
-    virtual void Visit(MulExpression* expression) = 0;
-    virtual void Visit(NotExpression* expression) = 0;
     virtual void Visit(ObjectExpression* expression) = 0;
+    virtual void Visit(UnaryExpression* expression) = 0;
+    virtual void Visit(SubscriptExpression* expression) = 0;
+    virtual void Visit(FunctionCallExpression* expression) = 0;
+    virtual void Visit(ArrayExpression* expression) = 0;
 
-    virtual void Visit(OrExpression* expression) = 0;
-    virtual void Visit(SubtractExpression* expression) = 0;
-    virtual void Visit(UnaryMinusExpression* expression) = 0;
+    virtual void Visit(DeclarationList* declarations) = 0;
+    virtual void Visit(ExpressionList* expressions) = 0;
+    virtual void Visit(CodeBlock* code) = 0;
+    virtual void Visit(FunctionDeclaration* function) = 0;
+
+    virtual void Visit(Pattern* pattern) = 0;
+    virtual void Visit(PatternList* pattern_list) = 0;
 
     virtual void Visit(Program* expression) = 0;
 };
