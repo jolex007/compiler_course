@@ -1,14 +1,14 @@
 #pragma once
 #include "expressions/Expression.h"
 
-enum PrefixOperator{
+enum class PrefixOperator{
     PRMINUS,
     NOT
 };
 
 class UnaryExpression: public Expression {
 public:
-    UnaryExpression(Expression *exp, const std::string& sign, const location_type &loc);
+    UnaryExpression(Expression *exp, PrefixOperator sign, const location_type &loc);
     void Accept(Visitor* visitor) override;
     ~UnaryExpression() override = default;
 

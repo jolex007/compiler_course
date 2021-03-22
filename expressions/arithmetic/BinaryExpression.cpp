@@ -3,12 +3,15 @@
 //
 
 #include "BinaryExpression.h"
+#include <iostream>
 
 BinaryExpression::BinaryExpression(Expression *lhs,
                                    Expression *rhs,
-                                   const std::string& sign,
+                                   InfixOperator sign,
                                    const location_type& loc)
-    : lhs(lhs), rhs(rhs), Expression(loc, "BinaryExpression") {
+    : Expression(loc, "BinaryExpression"), lhs(lhs), rhs(rhs), operator_(sign) {
+    /*
+    std::cout << sign << "!!!\n";
     if (sign == "+") {
         operator_ = PLUS;
     } else if (sign == "*") {
@@ -34,6 +37,7 @@ BinaryExpression::BinaryExpression(Expression *lhs,
     } else if (sign == "==") {
         operator_ = EQUAL;
     }
+    */
 }
 
 void BinaryExpression::Accept(Visitor *visitor) {

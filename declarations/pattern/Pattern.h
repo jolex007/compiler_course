@@ -4,8 +4,10 @@
 
 class Pattern : public BaseElement {
 public:
-    Pattern(IdentExpression* identifier, const location_type& loc);
+    Pattern(const std::string& identifier, const location_type& loc);
+    Pattern(const std::string& identifier, const std::string& type, const location_type& loc);
     void Accept(Visitor* visitor) override;
 
-    IdentExpression* identifier_;
+    std::string identifier_;
+    std::string type_;
 };

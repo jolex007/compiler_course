@@ -42,10 +42,7 @@ blank   [ \t\r]
 \n+         loc.lines(yyleng); loc.step();
 
 "->"        return yy::parser::make_ARROW(loc);
-"-"         {
-                std::cout << loc.begin.line << " " << loc.end.line << std::endl;
-                return yy::parser::make_MINUS(loc);
-            }
+"-"         return yy::parser::make_MINUS(loc);
 "+"         return yy::parser::make_PLUS(loc);
 "*"         return yy::parser::make_STAR(loc);
 "/"         return yy::parser::make_SLASH(loc);
@@ -60,6 +57,7 @@ blank   [ \t\r]
 ">="        return yy::parser::make_GE(loc);
 "<="        return yy::parser::make_LE(loc);
 "=="        return yy::parser::make_EQ(loc);
+"!="        return yy::parser::make_NE(loc);
 "="         return yy::parser::make_ASSIGN(loc);
 ","         return yy::parser::make_COMMA(loc);
 "if"        return yy::parser::make_IF(loc);

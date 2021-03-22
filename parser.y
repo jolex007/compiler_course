@@ -30,6 +30,9 @@
     class PatternList;
     class Pattern;
     class CodeBlock;
+
+    enum class InfixOperator;
+    enum class PrefixOperator;
 }
 
 %define parse.trace
@@ -59,13 +62,25 @@
 %define api.token.prefix {TOK_}
 
 %token
-    EOF 0 "end of file"
-    ENDL "\n"
-    ARROW "->"
     MINUS "-"
     PLUS "+"
     STAR "*"
     SLASH "/"
+    GT ">"
+    LT "<"
+    GE ">="
+    LE "<="
+    EQ "=="
+    NE "!="
+    ASSIGN "="
+    AND "and"
+    OR "or"
+    NOT "not"
+
+%token
+    EOF 0 "end of file"
+    ENDL "\n"
+    ARROW "->"
     LBRACKET "("
     RBRACKET ")"
     LEFTSCOPE "{"
@@ -74,12 +89,6 @@
     RARRAYBRACKET "]"
     COLON ":"
     DOT "."
-    GT ">"
-    LT "<"
-    GE ">="
-    LE "<="
-    EQ "=="
-    ASSIGN "="
     COMMA ","
     IF "if"
     ELSE "else"
@@ -96,9 +105,6 @@
     RANGE "range"
     WHILE "while"
     SELF "self"
-    AND "and"
-    OR "or"
-    NOT "not"
     PRINT "print"
     INIT "init"
     DEINIT "deinit"
@@ -107,6 +113,8 @@
 
 %token <std::string> IDENTIFIER "identifier"
 %token <int> NUMBER "number"
+%token <std::string> WILDCARD "_"
+
 // TODO:
 //   Add nterms
 
@@ -122,6 +130,8 @@
 %nterm <DeclarationList*> declarations
 %nterm <Declaration*> declaration
 %nterm <FunctionDeclaration*> function_declaration
+%nterm <FunctionDeclaration*> initializer_declaration
+%nterm <FunctionDeclaration*> deinitializer_declaration
 %nterm <PatternList*> function_declaration_argument_clause
 %nterm <PatternList*> pattern_list
 %nterm <Pattern*> pattern
@@ -129,9 +139,15 @@
 %nterm <StatementList*> statements
 %nterm <Statement*> statement
 %nterm <Expression*> primary_expression
-%nterm <std::string> prefix_operator
-%nterm <std::string> infix_operator
+%nterm <PrefixOperator> prefix_operator
+%nterm <InfixOperator> infix_operator
 
+
+%right "="
+%left "+" "-" "or"
+%left "*" "/" "and"
+%nonassoc UMINUS
+%nonassoc "not"
 
 %%
 
@@ -200,10 +216,10 @@ type_identifier:
     ;
 
 type_name:
-    "identifier"
-    | "String"
+    "String"
     | "Int"
     | "Bool"
+    | "identifier"
     ;
 
 declarations:
@@ -216,12 +232,12 @@ declaration:
     | variable_declaration
     | function_declaration { $$ = $1; }
     | class_declaration
-    | initializer_declaration
-    | deinitializer_declaration
+    | initializer_declaration { $$ = $1; }
+    | deinitializer_declaration { $$ = $1; }
     ;
 
 deinitializer_declaration:
-    "deinit" code_block
+    "deinit" code_block {} { $$ = new FunctionDeclaration(new PatternList(@$), $2, @$); }
     ;
 
 constant_declaration:
@@ -230,22 +246,22 @@ constant_declaration:
 
 pattern_initializer:
     pattern
-    | pattern initializer
+    | pattern initializer // TODO: Add "," separator
     ;
 
 initializer:
-    "=" expression
+    "=" expression // { $$ = $2; }
     ;
 
 pattern:
-    "_"
-    | "_" type_annotation
-    | "identifier" { $$ = new Pattern(new IdentExpression($1, @$), @$); } // TODO: fix it for pattern FIX ALL
-    | "identifier" type_annotation
+    "_" { $$ = new Pattern($1, @$); }
+    | "_" type_annotation // { $$ = new Pattern($1, $2, @$); }
+    | "identifier" { $$ = new Pattern($1, @$); }
+    | "identifier" type_annotation // { $$ = new Pattern($1, $2, @$); }
     ;
 
 type_annotation:
-    ":" type
+    ":" type // { $$ = $2; }
     ;
 
 variable_declaration:
@@ -271,7 +287,7 @@ function_return_type:
     ;
 
 initializer_declaration:
-    "init" function_declaration_argument_clause code_block
+    "init" function_declaration_argument_clause code_block { $$ = new FunctionDeclaration($2, $3, @$); }
     ;
 
 code_block:
@@ -341,30 +357,31 @@ array_expression:
     "[" expressions "]" { $$ = new ArrayExpression($2, @$); }
     ;
 
-prefix_operator: // Done
-    "-"
-    | "not"
+prefix_operator:
+    "-" %prec UMINUS { $$ = PrefixOperator::PRMINUS; }
+    | "not" { $$ = PrefixOperator::NOT; }
     ;
 
-infix_operator: // Done
-    "+"
-    | "*"
-    | "/"
-    | "-"
-    | "and"
-    | "or"
-    | "="
-    | ">"
-    | ">="
-    | "<"
-    | "<="
-    | "=="
+infix_operator:
+    "+" { $$ = InfixOperator::PLUS; }
+    | "*" { $$ = InfixOperator::MUL; }
+    | "/" { $$ = InfixOperator::DIV; }
+    | "-" { $$ = InfixOperator::MINUS; }
+    | "and" { $$ = InfixOperator::AND; }
+    | "or" { $$ = InfixOperator::OR; }
+    | "=" { $$ = InfixOperator::ASSIGN; }
+    | ">" { $$ = InfixOperator::GREATER; }
+    | ">=" { $$ = InfixOperator::GREATEREQUAL; }
+    | "<" { $$ = InfixOperator::LESS; }
+    | "<=" { $$ = InfixOperator::LESSEQUAL; }
+    | "==" { $$ = InfixOperator::EQUAL; }
+    | "!=" { $$ = InfixOperator::NOTEQUAL; }
     ;
 
 primary_expression:
     "identifier" { $$ = new IdentExpression($1, @$); }
     | "self"
-    | "(" expression ")"
+    | "(" expression ")" { $$ = $2; }
     ;
 
 function_call_expression:

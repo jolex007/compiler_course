@@ -1,7 +1,7 @@
 #pragma once
 #include "expressions/Expression.h"
 
-enum InfixOperator {
+enum class InfixOperator {
     PLUS,
     MUL,
     DIV,
@@ -13,12 +13,13 @@ enum InfixOperator {
     GREATEREQUAL,
     LESS,
     LESSEQUAL,
-    EQUAL
+    EQUAL,
+    NOTEQUAL
 };
 
 class BinaryExpression : public Expression {
 public:
-    BinaryExpression(Expression* lhs, Expression* rhs, const std::string& sign, const location_type& loc);
+    BinaryExpression(Expression* lhs, Expression* rhs, InfixOperator sign, const location_type& loc);
     void Accept(Visitor* visitor) override;
 
     Expression* lhs;

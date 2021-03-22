@@ -52,53 +52,59 @@ void SymbolTreeVisitor::Visit(BinaryExpression* exp) {
     PrintTabs();
     stream_ << exp->GetName() << " (loc): " << exp->GetLocation() << " operator: ";
     switch (exp->operator_) {
-    case PLUS:
+    case InfixOperator::PLUS:
         stream_ << "+";
         break;
-    case MUL:
+
+    case InfixOperator::MUL:
         stream_ << "*";
         break;
 
-    case DIV:
+    case InfixOperator::DIV:
         stream_ << "/";
         break;
 
-    case MINUS:
+    case InfixOperator::MINUS:
         stream_ << "-";
         break;
 
-    case AND:
+    case InfixOperator::AND:
         stream_ << "and";
         break;
 
-    case OR:
+    case InfixOperator::OR:
         stream_ << "or";
         break;
 
-    case ASSIGN:
+    case InfixOperator::ASSIGN:
         stream_ << "=";
         break;
 
-    case GREATER:
+    case InfixOperator::GREATER:
         stream_ << ">";
         break;
 
-    case GREATEREQUAL:
+    case InfixOperator::GREATEREQUAL:
         stream_ << ">=";
         break;
 
-    case LESS:
+    case InfixOperator::LESS:
         stream_ << "<";
         break;
 
-    case LESSEQUAL:
+    case InfixOperator::LESSEQUAL:
         stream_ << "<=";
         break;
 
-    case EQUAL:
+    case InfixOperator::EQUAL:
         stream_ << "==";
         break;
+
+    case InfixOperator::NOTEQUAL:
+        stream_ << "!=";
+        break;
     }
+    stream_ << std::endl;
 
     ++num_tabs_;
     exp->lhs->Accept(this);
@@ -111,10 +117,10 @@ void SymbolTreeVisitor::Visit(UnaryExpression* exp) {
 
     stream_ << exp->GetName() << " (loc): " << exp->GetLocation() << " operator: ";
     switch (exp->operator_) {
-    case PRMINUS:
+    case PrefixOperator::PRMINUS:
         stream_ << "-";
         break;
-    case NOT:
+    case PrefixOperator::NOT:
         stream_ << "not";
         break;
     }
@@ -139,7 +145,11 @@ void SymbolTreeVisitor::Visit(StatementList* assignment_list) {
 
 void SymbolTreeVisitor::Visit(IdentExpression* expression) {
     PrintTabs();
-    stream_ << "IdentExpression (loc): " << expression->GetLocation() << ' '  <<  expression->ident_ << std::endl;
+    stream_ << "IdentExpression (loc): " << expression->GetLocation() << std::endl;
+    ++num_tabs_;
+    PrintTabs();
+    stream_ << expression->ident_ << std::endl;
+    --num_tabs_;
 }
 
 void SymbolTreeVisitor::Visit(ObjectExpression* expression) {
@@ -209,7 +219,8 @@ void SymbolTreeVisitor::Visit(Pattern *pattern) {
     stream_ << "Pattern (loc): " << pattern->GetLocation() << ' ' << std::endl;
 
     ++num_tabs_;
-    pattern->identifier_->Accept(this);
+    PrintTabs();
+    stream_ << "name: " << pattern->identifier_ << std::endl;
     --num_tabs_;
 }
 
